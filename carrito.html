@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cherry Cook - Carrito</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="icon" href="img/cherrycook.jpg" type="image/png">
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- EmailJS (versión nueva oficial) -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function() {
+    emailjs.init({
+      publicKey: "7o1MRu_wCFOM5Ck5g" // tu clave pública EmailJS
+    });
+  })();
+</script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-danger" href="index.html">
+      <img src="img/cherrycook.jpg" width="60" class="me-2" alt="Cherry Cook"> Cherry Cook
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="productos.html">Productos</a></li>
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="nosotros.html">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="contacto.html">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link nav-perfil text-danger fw-semibold" href="login.html">Iniciar Sesión</a></li>
+      </ul>
+      <form class="d-flex align-items-center" id="searchForm">
+        <input id="searchInput" class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+        <button class="btn btn-outline-danger me-2" type="submit"><i class="fas fa-search"></i></button>
+        <a href="carrito.html" class="btn btn-danger"><i class="fas fa-shopping-cart"></i></a>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div class="mt-nav-offset" style="margin-top: 100px;"></div>
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center text-danger fw-bold mb-4">Tu Carrito</h2>
+    <div id="cartList"></div>
+    <div class="text-end mt-3">
+      <h4>Total: $<span id="cartTotal">0</span></h4>
+      <button id="checkout" class="btn btn-danger">Finalizar Compra</button>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-dark text-white py-4 text-center mt-5">
+ &copy; 2025 Cherry Cook | Hecho por DeltaCode | 
+  <a href="https://www.instagram.com/cherry_cook_/" target="_blank" class="text-danger"><i class="fab fa-instagram"></i> Instagram</a>
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/productos.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+function renderCart() {
+  const cart = loadCart();
+  const list = document.getElementById('cartList');
+  list.innerHTML = '';
+  if(cart.length === 0) {
+    list.innerHTML = '<p class="text-center text-muted">No hay productos en el carrito</p>';
+    document.getElementById('cartTotal').textContent = '0';
+    return;
+  }
+  cart.forEach(item=>{
+    const row = document.createElement('div');
+    row.className = 'card mb-3';
+    row.innerHTML = `
+      <div class="card-body d-flex align-items-center">
+        <img src="${item.img}" width="90" class="me-3 rounded">
+        <div class="flex-grow-1">
+          <h5>${item.nombre}</h5>
+          <p class="mb-1">Precio unitario: $${item.precio}</p>
+          <div class="d-flex align-items-center gap-2">
+            <input type="number" class="form-control qty-input" style="width:90px;" data-id="${item.id}" value="${item.cantidad}" min="1">
+            <button class="btn btn-outline-danger btn-sm btn-remove" data-id="${item.id}">Eliminar</button>
+          </div>
+        </div>
+        <div class="text-end">
+          <p class="mb-1">Subtotal</p>
+          <p class="fw-bold">$${item.precio * item.cantidad}</p>
+        </div>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+
+  document.querySelectorAll('.qty-input').forEach(inp=>{
+    inp.addEventListener('change', function(){
+      const id = parseInt(this.dataset.id);
+      const val = parseInt(this.value) || 1;
+      updateQuantity(id, val);
+      renderCart();
+    });
+  });
+  document.querySelectorAll('.btn-remove').forEach(b=>{
+    b.addEventListener('click', function(){
+      const id = parseInt(this.dataset.id);
+      removeFromCart(id);
+      renderCart();
+    });
+  });
+  document.getElementById('cartTotal').textContent = cartTotal();
+}
+
+// 💌 Finalizar compra con EmailJS
+document.getElementById('checkout').addEventListener('click', ()=>{
+  const cart = loadCart();
+  if(cart.length === 0) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Tu carrito está vacío',
+      text: 'Agrega productos antes de finalizar la compra',
+      confirmButtonColor: '#d63333'
+    });
+    return;
+  }
+
+  Swal.fire({
+    title: 'Finalizar compra',
+    input: 'email',
+    inputLabel: 'Ingresa tu correo electrónico para confirmar tu compra',
+    inputPlaceholder: 'ejemplo@gmail.com',
+    confirmButtonText: 'Enviar pedido',
+    confirmButtonColor: '#d63333',
+    showCancelButton: true,
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+    if (result.isConfirmed && result.value) {
+      const emailCliente = result.value;
+      const id_orden = Math.floor(Math.random() * 1000000);
+      const subtotal = cartTotal();
+
+      // 💵 Envío según monto total
+      const envio = subtotal >= 1000 ? 50 : 100;
+
+      // 💰 IVA Uruguay (22%)
+      const impuesto = (subtotal * 0.22).toFixed(2);
+
+      const totalFinal = (subtotal + envio + parseFloat(impuesto)).toFixed(2);
+
+      // 🔹 Texto legible del carrito
+      const ordersText = cart.map(p => 
+        `${p.nombre} - Cantidad: ${p.cantidad} - $${p.precio * p.cantidad}`
+      ).join('\n');
+
+      const templateParams = {
+        email: emailCliente,
+        id_orden: id_orden,
+        orders: ordersText,
+        envio: envio,
+        impuesto: impuesto,
+        total: totalFinal
+      };
+
+      emailjs.send('service_t6a1oyj', 'template_dshuhcr', templateParams)
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Compra confirmada 🎉',
+            text: 'Te enviamos un correo con los detalles de tu compra.',
+            confirmButtonColor: '#d63333'
+          });
+          saveCart([]);
+          renderCart();
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al enviar el correo',
+            text: 'Verifica tu conexión o configuración de EmailJS.',
+            confirmButtonColor: '#d63333'
+          });
+        });
+    }
+  });
+});
+
+renderCart();
+</script>
+</body>
+</html>
+
+
+

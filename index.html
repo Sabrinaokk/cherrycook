@@ -1,0 +1,151 @@
+<!DOCTYPE>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cherry Cook - Inicio</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<meta name="description" content="Cherry Cook - Pastelería online con deliciosos productos y carrito interactivo.">
+<meta name="keywords" content="pastelería, tortas, cupcakes, Cherry Cook, comprar online">
+<meta name="author" content="DeltaCode">
+
+<link rel="icon" href="img/cherrycook.jpg" type="image/png">
+
+<style>
+  body { background-color: #fff; color: #212529; }
+  .navbar { padding: 0.5rem 1rem; }
+  .navbar-brand img { height: 50px; }
+  .fade-in { animation: fadeIn 1s ease-in-out; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #desayunoCarousel { margin-top: 5rem; }
+  #desayunoCarousel .carousel-item img {
+    height: 300px; width: auto; object-fit: cover; margin: auto; border-radius: 10px; cursor: pointer;
+  }
+  section { padding: 60px 0; }
+  section h2 { text-align: center; color: #dc3545; margin-bottom: 20px; }
+  section p { text-align: center; max-width: 800px; margin: auto; font-size: 1.1rem; }
+  footer { background-color: #333; color: white; padding: 20px 0; text-align: center; }
+  footer a { color: #dc3545; text-decoration: none; }
+  footer a:hover { color: #fff; }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-danger" href="index.html">
+      <img src="img/cherrycook.jpg" class="me-2" alt="Cherry Cook"> Cherry Cook
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="#inicio">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="productos.html">Productos</a></li>
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="nosotros.html">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="contacto.html">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link nav-perfil text-danger fw-semibold" href="login.html">Iniciar Sesión</a></li>
+      </ul>
+      <form class="d-flex align-items-center" id="searchForm">
+        <input id="searchInput" class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+        <button class="btn btn-outline-danger me-2" type="submit"><i class="fas fa-search"></i></button>
+        <a href="carrito.html" class="btn btn-danger"><i class="fas fa-shopping-cart"></i></a>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<div id="desayunoCarousel" class="carousel slide container" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#desayunoCarousel" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#desayunoCarousel" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#desayunoCarousel" data-bs-slide-to="2"></button>
+  </div>
+
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="img/images1.jpg" class="d-block" data-bs-toggle="modal" data-bs-target="#modal1" alt="Cookies de varios sabores">
+    </div>
+    <div class="carousel-item">
+      <img src="img/torta2.jpg" class="d-block" data-bs-toggle="modal" data-bs-target="#modal2" alt="Torta especial">
+    </div>
+    <div class="carousel-item">
+      <img src="img/images2.jpg" class="d-block" data-bs-toggle="modal" data-bs-target="#modal3" alt="Caja desayuno clásica">
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#desayunoCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#desayunoCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal1Label">Cookies de varios sabores</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">Caja especial para regalar con galletas de sabores diferentes.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="modal2Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal2Label">Torta especial</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">Una torta única para cada ocasión, hecha con amor.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal3" tabindex="-1" aria-labelledby="modal3Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-dark">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal3Label">Caja desayuno clásica</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">Incluye jugo de naranja, biscochos y galletas.</div>
+    </div>
+  </div>
+</div>
+
+<section id="inicio" class="py-5">
+  <h2>Sobre Cherry Cook</h2>
+  <p>Cherry Cook es una pastelería artesanal en Montevideo que se dedica a crear productos únicos y deliciosos. Nos especializamos en tortas, cupcakes, alfajores y galletas personalizadas, elaborados con ingredientes frescos y de alta calidad. Nuestro compromiso es endulzar cada momento especial con amor y dedicación.</p>
+  <p>Además, ofrecemos opciones para todo tipo de eventos: cumpleaños, aniversarios, celebraciones empresariales y regalos personalizados. Cada producto es elaborado con cuidado, buscando que cada experiencia con Cherry Cook sea memorable.</p>
+</section>
+
+<footer>
+  <p>&copy; 2025 Cherry Cook | Hecho por DeltaCode | 
+    <a href="https://www.instagram.com/cherry_cook_/" target="_blank" class="text-danger"><i class="fab fa-instagram"></i> Instagram</a>
+  </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+  document.getElementById("searchForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    let query = document.getElementById("searchInput").value.toLowerCase().trim();
+    if(query) window.location.href = "productos.html?buscar=" + encodeURIComponent(query);
+  });
+</script>
+
+</body>
+</html>
